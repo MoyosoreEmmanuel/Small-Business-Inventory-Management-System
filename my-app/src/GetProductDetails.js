@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-const CheckProductQuantity = ({ contract }) => {
+const GetProductDetails = ({ contract }) => {
   const [account, setAccount] = useState('');
-  const [productIndex, setProductIndex] = useState(0);
-  const [quantity, setQuantity] = useState(null);
+  const [index, setIndex] = useState(0);
+  const [productDetails, setProductDetails] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,21 +27,21 @@ const CheckProductQuantity = ({ contract }) => {
     return () => window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
   }, [account]);
 
-  const handleCheckProductQuantity = async () => {
+  const handleGetProductDetails = async () => {
     setIsLoading(true);
     setErrorMessage('');
-    setQuantity(null);
+    setProductDetails(null);
 
     try {
-      const quantity = await contract.methods.checkProductQuantity(productIndex).call({ from: account });
-      
-      // Convert the returned quantity to a number
-      const quantityNumber = Number(quantity);
-      
-      setQuantity(quantityNumber);
+      const details = await contract.methods.getProductDetails(index).call({ from: account });
+      setProductDetails({
+        name: details[0],
+        quantity: Number(details[1]),
+        price: Number(details[2]),
+      });
     } catch (error) {
       console.error(error);
-      let errorMessage = 'Error checking product quantity: ';
+      let errorMessage = 'Error fetching product details: ';
   
       if (error.code === 'CALL_EXCEPTION') {
         errorMessage += error.data.message;
@@ -57,20 +57,37 @@ const CheckProductQuantity = ({ contract }) => {
 
   return (
     <div>
-      <h2>Check Product Quantity</h2>
+      <h2>Get Product Details</h2>
       <input
         type="number"
-        value={productIndex}
-        onChange={e => setProductIndex(Number(e.target.value))}
+        value={index}
+        onChange={e => setIndex(e.target.value)}
         placeholder="Enter product index"
       />
-      <button onClick={handleCheckProductQuantity} disabled={isLoading}>
-        {isLoading ? 'Checking...' : 'Check Quantity'}
+      <button onClick={handleGetProductDetails} disabled={isLoading}>
+        {isLoading ? 'Loading...' : 'Get Details'}
       </button>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      {quantity !== null && <p>Quantity: {quantity}</p>}
+      {productDetails && (
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{productDetails.name}</td>
+              <td>{productDetails.quantity}</td>
+              <td>{productDetails.price}</td>
+            </tr>
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
 
-export default CheckProductQuantity;
+export default GetProductDetails;

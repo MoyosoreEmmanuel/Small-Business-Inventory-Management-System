@@ -29,4 +29,3 @@ phases:
       - npm install
       - echo "Starting React app..."
       - npm start
-

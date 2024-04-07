@@ -17,6 +17,7 @@ contract SmallBusinessInventory {
     event QuantityUpdated(uint index, uint oldQuantity, uint newQuantity);
     event ProductSold(uint index, uint quantity);
     event ProductRemoved(uint index);
+    event PriceUpdated(uint index, uint oldPrice, uint newPrice);
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only the contract owner can perform this operation");
@@ -77,5 +78,21 @@ contract SmallBusinessInventory {
             productList[i] = products[i];
         }
         return productList;
+    }
+
+    function changeProductPrice(uint index, uint newPrice) public onlyOwner {
+        require(index < productIndex, "Product not found");
+        require(newPrice > 0, "Product price must be greater than zero");
+
+        uint oldPrice = products[index].price;
+        products[index].price = newPrice;
+        emit PriceUpdated(index, oldPrice, newPrice);
+    }
+
+    function getProductDetails(uint index) public view returns (string memory name, uint quantity, uint price) {
+        require(index < productIndex, "Product not found");
+
+        Product memory product = products[index];
+        return (product.name, product.quantity, product.price);
     }
 }

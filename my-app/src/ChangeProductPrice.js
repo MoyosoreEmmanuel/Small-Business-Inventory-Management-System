@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-const CheckProductQuantity = ({ contract }) => {
+const ChangeProductPrice = ({ contract }) => {
   const [account, setAccount] = useState('');
-  const [productIndex, setProductIndex] = useState(0);
-  const [quantity, setQuantity] = useState(null);
+  const [index, setIndex] = useState(0);
+  const [newPrice, setNewPrice] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -27,21 +28,20 @@ const CheckProductQuantity = ({ contract }) => {
     return () => window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
   }, [account]);
 
-  const handleCheckProductQuantity = async () => {
+  const handleChangeProductPrice = async () => {
     setIsLoading(true);
     setErrorMessage('');
-    setQuantity(null);
+    setSuccessMessage('');
 
     try {
-      const quantity = await contract.methods.checkProductQuantity(productIndex).call({ from: account });
-      
-      // Convert the returned quantity to a number
-      const quantityNumber = Number(quantity);
-      
-      setQuantity(quantityNumber);
+      await contract.methods.changeProductPrice(index, newPrice).send({ from: account });
+
+      setSuccessMessage(`Price for product at index "${index}" changed successfully!`);
+      setIndex(0);
+      setNewPrice(0);
     } catch (error) {
       console.error(error);
-      let errorMessage = 'Error checking product quantity: ';
+      let errorMessage = 'Error changing product price: ';
   
       if (error.code === 'CALL_EXCEPTION') {
         errorMessage += error.data.message;
@@ -52,25 +52,35 @@ const CheckProductQuantity = ({ contract }) => {
       setErrorMessage(errorMessage);
     } finally {
       setIsLoading(false);
+      setTimeout(() => {
+        setErrorMessage('');
+        setSuccessMessage('');
+      }, 5000);
     }
   };
 
   return (
     <div>
-      <h2>Check Product Quantity</h2>
+      <h2>Change Product Price</h2>
       <input
         type="number"
-        value={productIndex}
-        onChange={e => setProductIndex(Number(e.target.value))}
+        value={index}
+        onChange={e => setIndex(e.target.value)}
         placeholder="Enter product index"
       />
-      <button onClick={handleCheckProductQuantity} disabled={isLoading}>
-        {isLoading ? 'Checking...' : 'Check Quantity'}
+      <input
+        type="number"
+        value={newPrice}
+        onChange={e => setNewPrice(e.target.value)}
+        placeholder="Enter new price"
+      />
+      <button onClick={handleChangeProductPrice} disabled={isLoading}>
+        {isLoading ? 'Changing...' : 'Change Price'}
       </button>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      {quantity !== null && <p>Quantity: {quantity}</p>}
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
     </div>
   );
 };
 
-export default CheckProductQuantity;
+export default ChangeProductPrice;
