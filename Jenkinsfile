@@ -11,9 +11,9 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 sh 'echo "Updating instance..."'
-                sh 'sudo yum update -y'
+                sh 'yum update -y'
                 sh 'echo "Installing global dependencies..."'
-                sh 'sudo npm install -g truffle web3'
+                sh 'npm install -g truffle web3'
                 sh 'echo "Installing HDWallet Provider..."'
                 sh 'npm install @truffle/hdwallet-provider'
             }
