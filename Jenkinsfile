@@ -47,7 +47,7 @@ pipeline {
             }
         }
 
-        stage('Build React app') {
+        stage('Start React app') {
             steps {
                 dir('my-app') {
                     script {
@@ -56,13 +56,11 @@ pipeline {
                             bat 'echo "Installing React app dependencies..."'
                             bat 'npm install'
                             dir('src') {
-                                bat 'echo "Building React app..."'
-                                bat 'npm run build'
                                 bat 'echo "Starting React app..."'
                                 bat 'start cmd /k "npm start"'
                             }
                         } catch (Exception e) {
-                            error "Failed to build React app: ${e.message}"
+                            error "Failed to start React app: ${e.message}"
                         }
                     }
                 }
