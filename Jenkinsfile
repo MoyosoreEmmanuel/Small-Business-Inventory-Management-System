@@ -11,7 +11,8 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 bat 'echo "Updating instance..."'
-                bat 'npm install -g truffle web3'
+                bat 'npm install -g truffle'
+                bat 'npm install -g web3'
                 bat 'echo "Installing HDWallet Provider..."'
                 bat 'npm install @truffle/hdwallet-provider'
             }
