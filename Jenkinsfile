@@ -11,7 +11,7 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 sh 'echo "Updating instance..."'
-                sh 'apt-get update -y'
+                sh 'echo \'binatone1@\' | sudo -S apt-get update -y'
                 sh 'echo "Installing global dependencies..."'
                 sh 'npm install -g truffle web3'
                 sh 'echo "Installing HDWallet Provider..."'
