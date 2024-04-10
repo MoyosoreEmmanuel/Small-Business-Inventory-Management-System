@@ -9,9 +9,9 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     sepolia: {
-      provider: () => new HDWalletProvider(mnemonic, 'wss://eth-sepolia.g.alchemy.com/v2/MTLUdRFmiL2wVbWM_Tgwr91j7dxFTM37'),
+      provider: () => new HDWalletProvider(mnemonic, 'wss://eth-sepolia.g.alchemy.com/v2/jwzzReO__MTzYHBFTZ6HHCshoRxJ77Nd'),
       network_id: 11155111,        // Sepolia's network id
-      gas: 5500000,         // Gas limit - set it to a high value
+      gas: 500000,         // Gas limit - set it to a high value
     }
   },
 
