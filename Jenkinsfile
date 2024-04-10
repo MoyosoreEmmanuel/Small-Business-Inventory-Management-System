@@ -8,16 +8,17 @@ pipeline {
             }
         }
 
-        stage('Install dependencies') {
-            steps {
-                sh 'echo "Updating instance..."'
-                sh 'apt-get update -y'
-                sh 'echo "Installing global dependencies..."'
-                sh 'npm install -g truffle web3'
-                sh 'echo "Installing HDWallet Provider..."'
-                sh 'npm install @truffle/hdwallet-provider'
-            }
-        }
+       stage('Install dependencies') {
+    steps {
+        sh 'echo "Updating instance..."'
+        sh 'sudo apt-get update -y'
+        sh 'echo "Installing global dependencies..."'
+        sh 'sudo npm install -g truffle web3'
+        sh 'echo "Installing HDWallet Provider..."'
+        sh 'sudo npm install @truffle/hdwallet-provider'
+    }
+}
+
 
         stage('Compile and migrate contract') {
             steps {
