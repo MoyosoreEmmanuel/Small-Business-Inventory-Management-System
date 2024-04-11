@@ -23,8 +23,6 @@ pipeline {
                         bat "npm install -g web3@${env.WEB3_VERSION}"
                         bat 'echo "Installing HDWallet Provider..."'
                         bat 'npm install @truffle/hdwallet-provider'
-                        bat 'echo "Installing serve..."'
-                        bat 'npm install -g serve'
                     } catch (Exception e) {
                         error "Failed to install dependencies: ${e.message}"
                     }
@@ -49,7 +47,7 @@ pipeline {
             }
         }
 
-        stage('Build and serve React app') {
+        stage('Serve React app') {
             steps {
                 dir('my-app') {
                     script {
@@ -57,14 +55,18 @@ pipeline {
                             bat 'echo "Navigating to React app directory..."'
                             bat 'echo "Installing React app dependencies..."'
                             bat 'npm install'
-                            bat 'echo "Building React app..."'
-                            bat 'npm run build'
-                            dir('build') {
-                                bat 'echo "Serving React app..."'
-                                bat 'start cmd /k "serve -s ."'
-                            }
                         } catch (Exception e) {
-                            error "Failed to build and serve React app: ${e.message}"
+                            error "Failed to install React app dependencies: ${e.message}"
+                        }
+                    }
+                    dir('src') {
+                        script {
+                            try {
+                                bat 'echo "Starting React app..."'
+                                bat 'npm start'
+                            } catch (Exception e) {
+                                error "Failed to start React app: ${e.message}"
+                            }
                         }
                     }
                 }
