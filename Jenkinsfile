@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('Delay') {
+        stage('Delay after installing dependencies') {
             steps {
                 script {
                     sleep(time: 1, unit: 'MINUTES')
@@ -67,21 +67,27 @@ pipeline {
                             error "Failed to install React app dependencies: ${e.message}"
                         }
                     }
-                    stage('Delay') {
-                        steps {
-                            script {
-                                sleep(time: 1, unit: 'MINUTES')
-                            }
-                        }
-                    }
-                    dir('src') {
-                        script {
-                            try {
-                                bat 'echo "Starting React app..."'
-                                bat 'npm start'
-                            } catch (Exception e) {
-                                error "Failed to start React app: ${e.message}"
-                            }
+                }
+            }
+        }
+
+        stage('Delay after installing React app dependencies') {
+            steps {
+                script {
+                    sleep(time: 1, unit: 'MINUTES')
+                }
+            }
+        }
+
+        stage('Start React app') {
+            steps {
+                dir('my-app/src') {
+                    script {
+                        try {
+                            bat 'echo "Starting React app..."'
+                            bat 'npm start'
+                        } catch (Exception e) {
+                            error "Failed to start React app: ${e.message}"
                         }
                     }
                 }
