@@ -81,17 +81,23 @@ pipeline {
             }
         }
 
-        stage('Start React app') {
-            steps {
-                dir('my-app/src') {
-                    script {
-                        try {
-                            bat 'echo "Starting React app..."'
-                            bat 'start cmd /c "npm start"'
-                        } catch (Exception e) {
-                            error "Failed to start React app: ${e.message}"
+       stage('Start React app and wait') {
+    steps {
+        dir('my-app/src') {
+            script {
+                try {
+                    bat 'echo "Starting React app..."'
+                    bat 'start /b cmd /c "npm start > output.txt 2>&1"'
+                    bat 'echo "Waiting for server to start..."'
+                    waitUntil {
+                        script {
+                            def log = readFile('output.txt').split("\n")
+                            def started = log.any { it.contains("Compiled successfully!") }
+                            return started
                         }
                     }
+                } catch (Exception e) {
+                    error "Failed to start React app: ${e.message}"
                 }
             }
         }
