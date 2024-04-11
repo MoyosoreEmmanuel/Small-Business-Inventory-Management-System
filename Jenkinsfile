@@ -30,6 +30,14 @@ pipeline {
             }
         }
 
+        stage('Delay') {
+            steps {
+                script {
+                    sleep(time: 1, unit: 'MINUTES')
+                }
+            }
+        }
+
         stage('Compile and migrate contract') {
             steps {
                 script {
@@ -57,6 +65,13 @@ pipeline {
                             bat 'npm install'
                         } catch (Exception e) {
                             error "Failed to install React app dependencies: ${e.message}"
+                        }
+                    }
+                    stage('Delay') {
+                        steps {
+                            script {
+                                sleep(time: 1, unit: 'MINUTES')
+                            }
                         }
                     }
                     dir('src') {
