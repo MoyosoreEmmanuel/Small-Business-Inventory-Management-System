@@ -87,7 +87,7 @@ pipeline {
                     script {
                         try {
                             bat 'echo "Starting React app..."'
-                            bat 'npm start'
+                            bat 'start cmd /c "npm start"'
                         } catch (Exception e) {
                             error "Failed to start React app: ${e.message}"
                         }
