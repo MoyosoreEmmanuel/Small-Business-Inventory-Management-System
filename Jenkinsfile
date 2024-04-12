@@ -1,19 +1,16 @@
 pipeline {
     agent any
-
     environment {
         // Define your environment variables here
         TRUFFLE_VERSION = 'latest'
         WEB3_VERSION = 'latest'
     }
-
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
         stage('Install dependencies') {
             steps {
                 script {
@@ -29,7 +26,6 @@ pipeline {
                 }
             }
         }
-
         stage('Delay after installing dependencies') {
             steps {
                 script {
@@ -37,7 +33,6 @@ pipeline {
                 }
             }
         }
-
         stage('Compile and migrate contract') {
             steps {
                 script {
@@ -45,6 +40,7 @@ pipeline {
                         bat 'echo "Compiling contract..."'
                         bat 'npx truffle compile'
                         bat 'echo "Migrating contract to Sepolia..."'
+                        bat 'npx truffle migrate --network sepolia'
                         retry(3) {
                             bat 'npx truffle migrate --network sepolia'
                         }
@@ -56,7 +52,6 @@ pipeline {
                 }
             }
         }
-
         stage('Serve React app') {
             steps {
                 dir('my-app') {
@@ -72,7 +67,6 @@ pipeline {
                 }
             }
         }
-
         stage('Delay after installing React app dependencies') {
             steps {
                 script {
@@ -80,14 +74,13 @@ pipeline {
                 }
             }
         }
-
         stage('Start React app') {
             steps {
                 dir('my-app/src') {
                     script {
                         try {
                             bat 'echo "Starting React app..."'
-                            bat 'start cmd /c "npm start"'
+                            bat 'npm start'
                         } catch (Exception e) {
                             error "Failed to start React app: ${e.message}"
                         }
