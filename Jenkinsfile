@@ -81,11 +81,19 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Start React app') {
             steps {
-                script {
-                    bat 'npm run start -- p 3000'
+                dir('my-app/src') {
+                    script {
+                        try {
+                            bat 'echo "Starting React app..."'
+                            bat 'npm start'
+                        } catch (Exception e) {
+                            error "Failed to start React app: ${e.message}"
+                        }
+                    }
                 }
             }
         }
     }
+}
