@@ -45,9 +45,7 @@ pipeline {
                         bat 'echo "Compiling contract..."'
                         bat 'npx truffle compile'
                         bat 'echo "Migrating contract to Sepolia..."'
-                        retry(3) {
-                            bat 'npx truffle migrate --network sepolia'
-                        }
+                        bat 'npx truffle migrate --network sepolia'
                         bat 'echo "Copying contract artifact to src..."'
                         bat 'copy build\\contracts\\SmallBusinessInventory.json my-app\\src\\'
                     } catch (Exception e) {
