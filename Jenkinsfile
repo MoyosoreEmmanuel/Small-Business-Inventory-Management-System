@@ -87,7 +87,7 @@ pipeline {
             script {
                 try {
                     bat 'echo "Starting React app..."'
-                    bat 'start /b cmd /c "npm start > output.txt 2>&1"'
+                    bat 'npm run start -- p 3000'
                     bat 'echo "Waiting for server to start..."'
                     waitUntil {
                         script {
