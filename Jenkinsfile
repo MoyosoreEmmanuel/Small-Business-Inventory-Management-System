@@ -30,6 +30,13 @@ pipeline {
             }
         }
 
+          stage('Delay after installing dependencies') {
+            steps {
+                script {
+                    sleep(time: 1, unit: 'MINUTES')
+                }
+            }
+        }
         stage('Compile and migrate contract') {
             steps {
                 script {
@@ -37,7 +44,9 @@ pipeline {
                         bat 'echo "Compiling contract..."'
                         bat 'npx truffle compile'
                         bat 'echo "Migrating contract to Sepolia..."'
-                        bat 'npx truffle migrate --network sepolia'
+                        retry(3) {
+                            bat 'npx truffle migrate --network sepolia'
+                        }
                         bat 'echo "Copying contract artifact to src..."'
                         bat 'copy build\\contracts\\SmallBusinessInventory.json my-app\\src\\'
                     } catch (Exception e) {
