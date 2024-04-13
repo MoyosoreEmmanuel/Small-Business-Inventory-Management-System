@@ -1,16 +1,19 @@
 pipeline {
     agent any
+
     environment {
         // Define your environment variables here
         TRUFFLE_VERSION = 'latest'
         WEB3_VERSION = 'latest'
     }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
+
         stage('Install dependencies') {
             steps {
                 script {
@@ -26,13 +29,7 @@ pipeline {
                 }
             }
         }
-        stage('Delay after installing dependencies') {
-            steps {
-                script {
-                    sleep(time: 1, unit: 'MINUTES')
-                }
-            }
-        }
+
         stage('Compile and migrate contract') {
             steps {
                 script {
@@ -41,9 +38,6 @@ pipeline {
                         bat 'npx truffle compile'
                         bat 'echo "Migrating contract to Sepolia..."'
                         bat 'npx truffle migrate --network sepolia'
-                        retry(3) {
-                            bat 'npx truffle migrate --network sepolia'
-                        }
                         bat 'echo "Copying contract artifact to src..."'
                         bat 'copy build\\contracts\\SmallBusinessInventory.json my-app\\src\\'
                     } catch (Exception e) {
@@ -52,6 +46,7 @@ pipeline {
                 }
             }
         }
+
         stage('Serve React app') {
             steps {
                 dir('my-app') {
@@ -64,25 +59,14 @@ pipeline {
                             error "Failed to install React app dependencies: ${e.message}"
                         }
                     }
-                }
-            }
-        }
-        stage('Delay after installing React app dependencies') {
-            steps {
-                script {
-                    sleep(time: 1, unit: 'MINUTES')
-                }
-            }
-        }
-        stage('Start React app') {
-            steps {
-                dir('my-app/src') {
-                    script {
-                        try {
-                            bat 'echo "Starting React app..."'
-                            bat 'npm start'
-                        } catch (Exception e) {
-                            error "Failed to start React app: ${e.message}"
+                    dir('src') {
+                        script {
+                            try {
+                                bat 'echo "Starting React app..."'
+                                bat 'npm start'
+                            } catch (Exception e) {
+                                error "Failed to start React app: ${e.message}"
+                            }
                         }
                     }
                 }
