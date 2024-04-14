@@ -4,7 +4,6 @@ pipeline {
     environment {
         // Define your environment variables here
         TRUFFLE_VERSION = 'latest'
-        WEB3_VERSION = 'latest'
     }
 
     stages {
@@ -20,7 +19,7 @@ pipeline {
                     try {
                         bat 'echo "Updating instance..."'
                         bat "npm install -g truffle@${env.TRUFFLE_VERSION}"
-                        bat "npm install -g web3@${env.WEB3_VERSION}"
+                        
                         bat 'echo "Installing HDWallet Provider..."'
                         bat 'npm install @truffle/hdwallet-provider'
                     } catch (Exception e) {
