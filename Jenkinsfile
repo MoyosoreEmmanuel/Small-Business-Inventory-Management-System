@@ -57,7 +57,7 @@ pipeline {
 
      stage('Test components') {
     steps {
-        dir('my-app/src') {
+        dir('src') {
             script {
                 try {
                     bat 'echo "Running React component tests..."'
