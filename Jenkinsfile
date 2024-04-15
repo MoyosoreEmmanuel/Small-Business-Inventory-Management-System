@@ -55,20 +55,21 @@ pipeline {
             }
         }
 
-         stage('Test  components') {
-            steps {
-                dir('my-app') {
-                    script {
-                        try {
-                            bat 'echo "Running React component tests..."'
-                            bat 'npm test'
-                        } catch (Exception e) {
-                            error "Failed to run React component tests: ${e.message}"
-                        }
-                    }
+     stage('Test components') {
+    steps {
+        dir('my-app/src') {
+            script {
+                try {
+                    bat 'echo "Running React component tests..."'
+                    bat 'npm start'
+                } catch (Exception e) {
+                    error "Failed to start the application: ${e.message}"
                 }
             }
         }
+    }
+}
+
 
         stage('Serve React app') {
             steps {
