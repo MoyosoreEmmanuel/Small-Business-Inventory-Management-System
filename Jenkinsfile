@@ -21,6 +21,7 @@ pipeline {
                         bat "npm install -g truffle@${env.TRUFFLE_VERSION}"
                         
                         bat 'echo "Installing HDWallet Provider..."'
+                        bat 'npm install -g jest'
                         bat 'npm install @truffle/hdwallet-provider'
                     } catch (Exception e) {
                         error "Failed to install dependencies: ${e.message}"
@@ -55,20 +56,19 @@ pipeline {
             }
         }
 
-     stage('Test components') {
+    stage('Run tests') {
     steps {
-        dir('src') {
-            script {
-                try {
-                    bat 'echo "Running React component tests..."'
-                    bat 'npm start'
-                } catch (Exception e) {
-                    error "Failed to start the application: ${e.message}"
-                }
+        script {
+            try {
+                bat 'echo "Running tests..."'
+                bat 'jest'
+            } catch (Exception e) {
+                error "Failed to run tests: ${e.message}"
             }
         }
     }
 }
+
 
 
         stage('Serve React app') {
