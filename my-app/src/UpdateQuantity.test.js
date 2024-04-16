@@ -2,18 +2,18 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils'; // Import act from react-dom/test-utils
-import ChangeProductPrice from './ChangeProductPrice';
+import UpdateQuantity from './UpdateQuantity';
 
 // Mock the contract prop
 const mockContract = {
   methods: {
-    changeProductPrice: () => ({
+    updateQuantity: () => ({
       send: jest.fn().mockResolvedValue(true),
     }),
   },
 };
 
-describe('ChangeProductPrice', () => {
+describe('UpdateQuantity', () => {
   // Set up the window.ethereum mock before each test
   beforeEach(() => {
     global.window.ethereum = {
@@ -25,15 +25,15 @@ describe('ChangeProductPrice', () => {
 
   it('renders without crashing', async () => { // Make the test callback async
     await act(async () => { // Wrap the render call in act
-      render(<ChangeProductPrice contract={mockContract} />);
+      render(<UpdateQuantity contract={mockContract} />);
     });
     
     // Check if the heading is in the document
-    expect(screen.getByText(/Change Product Price/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Update Product Quantity/i })).toBeInTheDocument();
     
     // Check if the inputs and button are in the document
     expect(screen.getByPlaceholderText(/Enter product index/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Enter new price/i)).toBeInTheDocument();
-    expect(screen.getByText(/Change Price/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Enter new quantity/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Update Quantity/i })).toBeInTheDocument();
   });
 });
