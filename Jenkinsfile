@@ -68,6 +68,7 @@ pipeline {
                     
                     bat 'echo "Installing @babel/plugin-proposal-private-property-in-object..."'
                     bat 'npm install --save-dev @babel/plugin-proposal-private-property-in-object'
+                    bat 'npm install --save-dev jest @testing-library/react @testing-library/user-event'
                     
                     bat 'echo "Running tests..."'
                     bat 'npm test'
