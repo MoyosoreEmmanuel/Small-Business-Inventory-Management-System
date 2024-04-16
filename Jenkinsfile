@@ -58,16 +58,27 @@ pipeline {
 
     stage('Run tests') {
     steps {
-        script {
-            try {
-                bat 'echo "Running tests..."'
-                bat 'jest'
-            } catch (Exception e) {
-                error "Failed to run tests: ${e.message}"
+        dir('my-app') {
+            script {
+                try {
+                    bat 'echo "Navigating to React app directory..."'
+                    
+                    bat 'echo "Installing @testing-library/jest-dom..."'
+                    bat 'npm install --save-dev @testing-library/jest-dom'
+                    
+                    bat 'echo "Installing @babel/plugin-proposal-private-property-in-object..."'
+                    bat 'npm install --save-dev @babel/plugin-proposal-private-property-in-object'
+                    
+                    bat 'echo "Running tests..."'
+                    bat 'npm test'
+                } catch (Exception e) {
+                    error "Failed to run tests: ${e.message}"
+                }
             }
         }
     }
 }
+
 
 
 
