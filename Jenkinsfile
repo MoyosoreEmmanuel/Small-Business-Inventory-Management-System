@@ -81,7 +81,7 @@ pipeline {
             }
         }
 
-        stage('Run tests') {
+       stage('Install test dependencies') {
     steps {
         dir('my-app') {
             script {
@@ -98,14 +98,19 @@ pipeline {
                     error "Failed to install dependencies: ${e.message}"
                 }
             }
-            dir('src') {
-                script {
-                    try {
-                        bat 'echo "Running tests in src directory..."'
-                        bat 'npm test -- --watchAll=true'
-                    } catch (Exception e) {
-                        error "Failed to run tests in src directory: ${e.message}"
-                    }
+        }
+    }
+}
+
+stage('Run tests') {
+    steps {
+        dir('my-app/src') {
+            script {
+                try {
+                    bat 'echo "Running tests in src directory..."'
+                    bat 'npm test -- --watchAll=true'
+                } catch (Exception e) {
+                    error "Failed to run tests in src directory: ${e.message}"
                 }
             }
         }
