@@ -4,7 +4,7 @@ pipeline {
    environment {
     // Define your environment variables here
     TRUFFLE_VERSION = 'latest'
-    PATH = "C:\\Users\\STEPHEN\\AppData\\Roaming\\npm\\node_modules:${env.PATH}"
+   
 }
 
 
