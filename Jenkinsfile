@@ -104,7 +104,7 @@ pipeline {
 
 stage('Run tests') {
     steps {
-        dir('my-app/src') {
+        dir('my-app') {
             script {
                 try {
                     bat 'echo "Running tests in src directory..."'
