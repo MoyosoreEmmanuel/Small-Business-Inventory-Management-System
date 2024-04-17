@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define your environment variables here
         TRUFFLE_VERSION = 'latest'
-        CI = 'true'
+        
     }
 
     stages {
