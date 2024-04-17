@@ -52,7 +52,14 @@ pipeline {
         }
     }
 }
-
+        
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
 stage('Migrate contract') {
     steps {
         script {
