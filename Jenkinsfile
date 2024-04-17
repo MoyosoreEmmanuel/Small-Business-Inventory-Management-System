@@ -21,7 +21,7 @@ pipeline {
                         bat "npm install -g truffle@${env.TRUFFLE_VERSION}"
                         
                         bat 'echo "Installing HDWallet Provider..."'
-                        bat 'npm install -g jest'
+                        
                         bat 'npm install @truffle/hdwallet-provider'
                     } catch (Exception e) {
                         error "Failed to install dependencies: ${e.message}"
@@ -65,7 +65,7 @@ pipeline {
                     
                     bat 'echo "Installing @testing-library/jest-dom..."'
                     bat 'npm install --save-dev @testing-library/jest-dom'
-                    
+                    bat 'npm install --save-dev jest@29.7.0'
                     bat 'echo "Installing @babel/plugin-proposal-private-property-in-object..."'
                     bat 'npm install --save-dev @babel/plugin-proposal-private-property-in-object'
                     bat 'npm install --save-dev jest @testing-library/react @testing-library/user-event'
