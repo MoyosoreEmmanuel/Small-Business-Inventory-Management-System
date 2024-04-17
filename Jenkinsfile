@@ -39,24 +39,36 @@ pipeline {
                 }
             }
         }
-        stage('Compile and migrate contract') {
-            steps {
-                script {
-                    try {
-                        bat 'echo "Compiling contract..."'
-                        bat 'npx truffle compile'
-                        bat 'echo "Migrating contract to Sepolia..."'
-                        retry(3) {
-                            bat 'truffle migrate --network sepolia'
-                        }
-                        bat 'echo "Copying contract artifact to src..."'
-                        bat 'copy build\\contracts\\SmallBusinessInventory.json my-app\\src\\'
-                    } catch (Exception e) {
-                        error "Failed to compile and migrate contract: ${e.message}"
-                    }
-                }
+        
+     stage('Compile contract') {
+    steps {
+        script {
+            try {
+                bat 'echo "Compiling contract..."'
+                bat 'npx truffle compile'
+            } catch (Exception e) {
+                error "Failed to compile contract: ${e.message}"
             }
         }
+    }
+}
+
+stage('Migrate contract') {
+    steps {
+        script {
+            try {
+                bat 'echo "Migrating contract to Sepolia..."'
+                retry(3) {
+                    bat 'truffle migrate --network sepolia'
+                }
+                bat 'echo "Copying contract artifact to src..."'
+                bat 'copy build\\contracts\\SmallBusinessInventory.json my-app\\src\\'
+            } catch (Exception e) {
+                error "Failed to migrate contract: ${e.message}"
+            }
+        }
+    }
+}
 
     stage('Run tests') {
     steps {
