@@ -131,3 +131,4 @@ stage('Migrate contract') {
         }
     }
 }
+}  
