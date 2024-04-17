@@ -74,29 +74,42 @@ pipeline {
             }
         }
 
-        stage('Run tests') {
+        stage('Checkout Once More') {
             steps {
-                dir('src') {
-                    script {
-                        try {
-                            bat 'echo "Navigating to React app directory..."'
-                            bat 'npm install --save-dev jest@29.7.0'
-                            bat 'echo "Installing @testing-library/jest-dom..."'
-                            bat 'npm install --save-dev @testing-library/jest-dom'
-                           
-                            bat 'echo "Installing @babel/plugin-proposal-private-property-in-object..."'
-                            bat 'npm install --save-dev @babel/plugin-proposal-private-property-in-object'
-                            bat 'npm install --save-dev jest @testing-library/react @testing-library/user-event'
-                            
-                            bat 'echo "Running tests..."'
-                            bat 'npm test'
-                        } catch (Exception e) {
-                            error "Failed to run tests: ${e.message}"
-                        }
+                checkout scm
+            }
+        }
+
+        stage('Run tests') {
+    steps {
+        dir('my-app') {
+            script {
+                try {
+                    bat 'echo "Navigating to React app directory..."'
+                    bat 'npm install --save-dev jest@29.7.0'
+                    bat 'echo "Installing @testing-library/jest-dom..."'
+                    bat 'npm install --save-dev @testing-library/jest-dom'
+                    bat 'echo "Installing @babel/plugin-proposal-private-property-in-object..."'
+                    bat 'npm install --save-dev @babel/plugin-proposal-private-property-in-object'
+                    bat 'npm install --save-dev jest @testing-library/react @testing-library/user-event'
+                } catch (Exception e) {
+                    error "Failed to install dependencies: ${e.message}"
+                }
+            }
+            dir('src') {
+                script {
+                    try {
+                        bat 'echo "Running tests in src directory..."'
+                        bat 'npm test'
+                    } catch (Exception e) {
+                        error "Failed to run tests in src directory: ${e.message}"
                     }
                 }
             }
         }
+    }
+}
+
 
         stage('Serve React app') {
             steps {
