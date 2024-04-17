@@ -59,7 +59,7 @@ stage('Migrate contract') {
             try {
                 bat 'echo "Migrating contract to Sepolia..."'
                 retry(3) {
-                    bat 'truffle migrate --network sepolia'
+                    bat 'npx truffle migrate --network sepolia'
                 }
                 bat 'echo "Copying contract artifact to src..."'
                 bat 'copy build\\contracts\\SmallBusinessInventory.json my-app\\src\\'
