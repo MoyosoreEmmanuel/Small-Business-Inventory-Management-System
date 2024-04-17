@@ -108,7 +108,7 @@ stage('Run tests') {
             script {
                 try {
                     bat 'echo "Running tests in src directory..."'
-                    bat 'npx react-scripts test --watchAll'
+                    bat 'npm react-scripts test --watchAll'
                 } catch (Exception e) {
                     error "Failed to run tests in src directory: ${e.message}"
                 }
