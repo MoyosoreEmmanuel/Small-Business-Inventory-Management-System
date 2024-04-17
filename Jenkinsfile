@@ -76,7 +76,7 @@ pipeline {
 
         stage('Run tests') {
             steps {
-                dir('my-app') {
+                dir('src') {
                     script {
                         try {
                             bat 'echo "Navigating to React app directory..."'
