@@ -1,12 +1,10 @@
 pipeline {
     agent any
 
-   environment {
-    // Define your environment variables here
-    TRUFFLE_VERSION = 'latest'
-   
-}
-
+    environment {
+        // Define your environment variables here
+        TRUFFLE_VERSION = 'latest'
+    }
 
     stages {
         stage('Checkout') {
@@ -32,7 +30,7 @@ pipeline {
             }
         }
 
-          stage('Delay after installing dependencies') {
+        stage('Delay after installing dependencies') {
             steps {
                 script {
                     sleep(time: 1, unit: 'MINUTES')
@@ -40,69 +38,65 @@ pipeline {
             }
         }
         
-     stage('Compile contract') {
-    steps {
-        script {
-            try {
-                bat 'echo "Compiling contract..."'
-                bat 'npx truffle compile'
-            } catch (Exception e) {
-                error "Failed to compile contract: ${e.message}"
+        stage('Compile contract') {
+            steps {
+                script {
+                    try {
+                        bat 'echo "Compiling contract..."'
+                        bat 'npx truffle compile'
+                    } catch (Exception e) {
+                        error "Failed to compile contract: ${e.message}"
+                    }
+                }
             }
         }
-    }
-}
-        
- 
-        stage('Checkout') {
+
+        stage('Checkout Again') {
             steps {
                 checkout scm
             }
         }
         
-stage('Migrate contract') {
-    steps {
-        script {
-            try {
-                bat 'echo "Migrating contract to Sepolia..."'
-                retry(3) {
-                    bat 'npx truffle migrate --network sepolia'
-                }
-                bat 'echo "Copying contract artifact to src..."'
-                bat 'copy build\\contracts\\SmallBusinessInventory.json my-app\\src\\'
-            } catch (Exception e) {
-                error "Failed to migrate contract: ${e.message}"
-            }
-        }
-    }
-}
-
-    stage('Run tests') {
-    steps {
-        dir('my-app') {
-            script {
-                try {
-                    bat 'echo "Navigating to React app directory..."'
-                    bat 'npm install --save-dev jest@29.7.0'
-                    bat 'echo "Installing @testing-library/jest-dom..."'
-                    bat 'npm install --save-dev @testing-library/jest-dom'
-                   
-                    bat 'echo "Installing @babel/plugin-proposal-private-property-in-object..."'
-                    bat 'npm install --save-dev @babel/plugin-proposal-private-property-in-object'
-                    bat 'npm install --save-dev jest @testing-library/react @testing-library/user-event'
-                    
-                    bat 'echo "Running tests..."'
-                    bat 'npm test'
-                } catch (Exception e) {
-                    error "Failed to run tests: ${e.message}"
+        stage('Migrate contract') {
+            steps {
+                script {
+                    try {
+                        bat 'echo "Migrating contract to Sepolia..."'
+                        retry(3) {
+                            bat 'npx truffle migrate --network sepolia'
+                        }
+                        bat 'echo "Copying contract artifact to src..."'
+                        bat 'copy build\\contracts\\SmallBusinessInventory.json my-app\\src\\'
+                    } catch (Exception e) {
+                        error "Failed to migrate contract: ${e.message}"
+                    }
                 }
             }
         }
-    }
-}
 
-
-
+        stage('Run tests') {
+            steps {
+                dir('my-app') {
+                    script {
+                        try {
+                            bat 'echo "Navigating to React app directory..."'
+                            bat 'npm install --save-dev jest@29.7.0'
+                            bat 'echo "Installing @testing-library/jest-dom..."'
+                            bat 'npm install --save-dev @testing-library/jest-dom'
+                           
+                            bat 'echo "Installing @babel/plugin-proposal-private-property-in-object..."'
+                            bat 'npm install --save-dev @babel/plugin-proposal-private-property-in-object'
+                            bat 'npm install --save-dev jest @testing-library/react @testing-library/user-event'
+                            
+                            bat 'echo "Running tests..."'
+                            bat 'npm test'
+                        } catch (Exception e) {
+                            error "Failed to run tests: ${e.message}"
+                        }
+                    }
+                }
+            }
+        }
 
         stage('Serve React app') {
             steps {
@@ -131,4 +125,3 @@ stage('Migrate contract') {
         }
     }
 }
-}  
