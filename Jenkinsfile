@@ -62,10 +62,10 @@ pipeline {
             script {
                 try {
                     bat 'echo "Navigating to React app directory..."'
-                    
+                    bat 'npm install --save-dev jest@29.7.0'
                     bat 'echo "Installing @testing-library/jest-dom..."'
                     bat 'npm install --save-dev @testing-library/jest-dom'
-                    bat 'npm install --save-dev jest@29.7.0'
+                   
                     bat 'echo "Installing @babel/plugin-proposal-private-property-in-object..."'
                     bat 'npm install --save-dev @babel/plugin-proposal-private-property-in-object'
                     bat 'npm install --save-dev jest @testing-library/react @testing-library/user-event'
