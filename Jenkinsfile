@@ -102,7 +102,7 @@ pipeline {
                 script {
                     try {
                         bat 'echo "Running tests in src directory..."'
-                        bat 'npm test'
+                        bat 'npm test -- --watchAll=true'
                     } catch (Exception e) {
                         error "Failed to run tests in src directory: ${e.message}"
                     }
