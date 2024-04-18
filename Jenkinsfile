@@ -110,7 +110,7 @@ stage('Run tests') {
             script {
                 try {
                     bat 'echo "Running tests in src directory..."'
-                    bat 'npm start'
+                    bat 'npm test'
                 } catch (Exception e) {
                     error "Failed to run tests in src directory: ${e.message}"
                 }
