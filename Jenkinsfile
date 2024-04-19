@@ -110,7 +110,7 @@ stage('Run tests') {
             script {
                 try {
                     bat 'echo "Running tests in src directory..."'
-                    bat 'npm test'
+                    bat 'nohup npm test'
                 } catch (Exception e) {
                     error "Failed to run tests in src directory: ${e.message}"
                 }
